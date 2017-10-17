@@ -33,7 +33,7 @@ $(ARCH_TARBALL):
 	$(WGET) http://archlinuxarm.org/os/$@
 
 $(UBOOT_BIN): $(UBOOT_DIR)
-	cd $< && $(MAKE) orangepi_zero_defconfig && $(MAKE) CROSS_COMPILE=$(CROSS_COMPILE) PYTHON=$(PYTHON)
+	cd $< && $(MAKE) orangepi_pc_defconfig && $(MAKE) CROSS_COMPILE=$(CROSS_COMPILE) PYTHON=$(PYTHON)
 	cp $</$@ .
 
 # Note: non-deterministic output as the image header contains a timestamp and a
