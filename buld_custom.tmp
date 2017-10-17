@@ -1,0 +1,30 @@
+CWD=`pwd`
+OUT=$CWD/builds
+SRC=$CWD/u-boot
+export CROSS_COMPILE=arm-unknown-eabi-
+export KBUILD_OUTPUT=$OUT/.tmp/uboot-pc
+rm -rf "$KBUILD_OUTPUT"
+mkdir -p $KBUILD_OUTPUT $OUT/pc
+export PATH=$PATH:/home/aleksey//crosstool-ng/.build/arm-unknown-eabi/buildtools/bin/
+git clone --depth 1 --single-branch -b orange-pi https://github.com/megous/u-boot.git
+make -C u-boot orangepi_pc_defconfig 
+make -C u-boot -j3
+
+cp $KBUILD_OUTPUT/.config $OUT/pc/uboot.config
+cp $KBUILD_OUTPUT/spl/sunxi-spl.bin $OUT/pc/uboot.bin
+
+
+
+git clone --depth 1 --single-branch -b orange-pi-4.14 https://github.com/megous/linux.git
+cp ./linux/linux-4.14-32 .config
+export ARCH=arm
+export CROSS_COMPILE=arm-unknown-eabi-
+export KBUILD_OUTPUT=$OUT/.tmp/linux-arm
+mkdir -p $KBUILD_OUTPUT $OUT/pc
+cp ./linux/linux-4.14-32 $KBUILD_OUTPUT/.config
+make -C linux -j3 clean
+make -C linux -j3 zImage dtbs
+
+cp -f $KBUILD_OUTPUT/arch/arm/boot/zImage $OUT/pc/
+cp -f $KBUILD_OUTPUT/.config $OUT/pc/linux.config
+cp -f $KBUILD_OUTPUT/arch/arm/boot/dts/sun8i-h3-orangepi-pc.dtb $OUT/pc/board.dtb
