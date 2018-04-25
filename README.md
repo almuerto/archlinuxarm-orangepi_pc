@@ -53,18 +53,6 @@ installation][alarm-allwinner].
 [alarm-allwinner]: https://archlinuxarm.org/platforms/armv7/allwinner/.
 
 
-Ethernet
-========
-
-In order to get ethernet working, you will need to downgrade to the 4.13-rc7
-since the network support has been [reverted in 54f70f52e3][sunxi-revert]. You
-can install the package with `pacman -U
-/root/linux-armv7-rc-4.13.rc7-1-armv7h.pkg.tar.xz` using the [serial
-interface][opiz-serial].
-
-[sunxi-revert]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=54f70f52e3b3a26164220d98a712a274bd28502f
-[opiz-serial]: http://linux-sunxi.org/Xunlong_Orange_Pi_Zero#Locating_the_UART
-
 
 Goodies
 =======
@@ -72,8 +60,3 @@ Goodies
 If you have a serial cable and `miniterm.py` installed (`python-pyserial`),
 `make serial` will open a session with the appropriate settings.
 
-
-TODO
-====
-
-- upstream to ArchLinuxARM
