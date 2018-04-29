@@ -5,7 +5,7 @@ export CROSS_COMPILE=arm-unknown-eabi-
 export KBUILD_OUTPUT=$OUT/.tmp/uboot-pc
 rm -rf "$KBUILD_OUTPUT"
 mkdir -p $KBUILD_OUTPUT $OUT/pc
-export PATH=$PATH:/home/aleksey//crosstool-ng/.build/arm-unknown-eabi/buildtools/bin/
+export PATH="$PATH:/opt/crosstool/arm-unknown-eabi/buildtools/bin/"
 git clone --depth 1 --single-branch -b orange-pi https://github.com/megous/u-boot.git
 make -C u-boot orangepi_pc_defconfig 
 make -C u-boot -j3
@@ -15,7 +15,7 @@ cp $KBUILD_OUTPUT/spl/sunxi-spl.bin $OUT/pc/uboot.bin
 
 
 
-git clone --depth 1 --single-branch -b orange-pi-4.14 https://github.com/megous/linux.git
+git clone --depth 1 --single-branch -b orange-pi-4.16 https://github.com/megous/linux.git
 cp ./linux/linux-4.14-32 .config
 export ARCH=arm
 export CROSS_COMPILE=arm-unknown-eabi-
