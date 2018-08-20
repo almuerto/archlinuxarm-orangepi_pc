@@ -2,7 +2,7 @@
 SERIAL_DEVICE = /dev/ttyUSB0
 WGET = wget
 MINITERM = miniterm.py
-CROSS_COMPILE ?= arm-unknown-eabi-
+CROSS_COMPILE ?= aarch64-linux-gnu-
 PYTHON ?= python2
 BLOCK_DEVICE ?= /dev/null
 FIND ?= find
@@ -10,11 +10,9 @@ FIND ?= find
 UBOOT_SCRIPT = boot.scr
 UBOOT_BIN = u-boot-sunxi-with-spl.bin
 
-ARCH_TARBALL = ArchLinuxARM-armv7-latest.tar.gz
+ARCH_TARBALL = ArchLinuxARM-aarch64-latest.tar.gz
 
-WORKING_KERNEL = linux-armv7-rc-4.13.rc7-1-armv7h.pkg.tar.xz
-
-UBOOT_VERSION = 2017.09
+UBOOT_VERSION = 2018.07
 UBOOT_TARBALL = u-boot-v$(UBOOT_VERSION).tar.gz
 UBOOT_DIR = u-boot-$(UBOOT_VERSION)
 
@@ -33,18 +31,13 @@ $(ARCH_TARBALL):
 	$(WGET) http://archlinuxarm.org/os/$@
 
 $(UBOOT_BIN): $(UBOOT_DIR)
-	cd $< && $(MAKE) orangepi_pc_defconfig && $(MAKE) CROSS_COMPILE=$(CROSS_COMPILE) PYTHON=$(PYTHON)
+	cd $< && $(MAKE) orangepi_pc2_defconfig && $(MAKE) CROSS_COMPILE=$(CROSS_COMPILE) PYTHON=$(PYTHON)
 	cp $</$@ .
 
 # Note: non-deterministic output as the image header contains a timestamp and a
 # checksum including this timestamp (2x32-bit at offset 4)
-$(UBOOT_SCRIPT): boot.txt
-	mkimage -A arm -O linux -T script -C none -n "U-Boot boot script" -d $< $@
-boot.txt:
-	$(WGET) https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/master/alarm/uboot-sunxi/$@
-
-$(WORKING_KERNEL):
-	$(WGET) http://tardis.tiny-vps.com/aarm/packages/l/linux-armv7-rc/$@
+$(UBOOT_SCRIPT): boot.cmd
+	mkimage -A arm64 -O linux -T script -C none -n "U-Boot boot script" -d boot.cmd boot.scr
 
 define part1
 /dev/$(shell basename $(shell $(FIND) /sys/block/$(shell basename $(1))/ -maxdepth 2 -name "partition" -printf "%h"))
@@ -75,7 +68,7 @@ serial:
 
 clean:
 	$(RM) $(ALL)
-	$(RM) boot.txt
 	$(RM) -r $(UBOOT_DIR)
+	$(RM) -f $(UBOOT_TARBALL)
 
 .PHONY: all serial clean install
