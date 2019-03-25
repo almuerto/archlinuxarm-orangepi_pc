@@ -10,7 +10,7 @@ GIT = git
 
 UBOOT_SCRIPT = boot.scr
 UBOOT_BIN = u-boot-sunxi-with-spl.bin
-PLAT = sun50iw1p1
+PLAT = sun50i_a64
 ARCH = arm64
 ARCH_TARBALL = ArchLinuxARM-aarch64-latest.tar.gz
 UBOOT_DIR = u-boot
@@ -26,14 +26,13 @@ all: $(ALL)
 $(UBOOT_DIR):
 	$(GIT) clone --depth=1 git://git.denx.de/u-boot.git 
 $(ARM_FIRMWARE_DIR):
-	$(GIT) clone --depth=1 https://github.com/apritzel/arm-trusted-firmware.git
+	$(GIT) clone --depth=1 https://github.com/ARM-software/arm-trusted-firmware.git
 $(ARCH_TARBALL):
 	$(WGET) http://archlinuxarm.org/os/$@
 
 
 $(ARM_FRIMWARE_BIN): $(ARM_FIRMWARE_DIR)
-	cd $< && $(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) PLAT=$(PLAT) DEBUG=1 bl31 -j2
-
+	cd $< && $(MAKE) CROSS_COMPILE=$(CROSS_COMPILE) PLAT=$(PLAT) DEBUG=1 -j2 bl31
 $(UBOOT_BIN): $(UBOOT_DIR)
 	cd $< && cp ../$(ARM_FIRMWARE_DIR)/build/$(PLAT)/debug/$(ARM_FRIMWARE_BIN) . && $(MAKE) ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) orangepi_pc2_defconfig && $(MAKE) ARCH=arm CROSS_COMPILE=$(CROSS_COMPILE) PYTHON=$(PYTHON) -j2
 	cp $</$@ .
