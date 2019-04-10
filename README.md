@@ -1,5 +1,5 @@
 This repository can be used to create an ArchLinuxARM image for the OrangePi
-PC board.
+PC 2 board.
 
 
 Dependencies
