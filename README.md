@@ -27,7 +27,7 @@ Run `make` (specifying jobs with `-jX` is supported and recommended).
 This will provide:
 
 - the ArchLinuxARM aarch64 default rootfs (`ArchLinuxARM-aarch64-latest.tar.gz`)
-- an u-boot image compiled for the OrangePi Zero (`u-boot-sunxi-with-spl.bin`)
+- an u-boot image compiled for the OrangePi PC2 (`u-boot-sunxi-with-spl.bin`)
 - a boot script (`boot.scr`) to be copied in `/boot`
 
 
